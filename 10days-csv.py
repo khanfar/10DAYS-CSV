@@ -9,9 +9,9 @@ def filter_csv():
     if file_path:
         try:
             # Load the CSV file into a DataFrame
-            df = pd.read_csv(file_path)
+            df = pd.read_csv(file_path, dtype={'تاريخ الدخول': str})
 
-            # Convert the "تاريخ الدخول" column to datetime format
+            # Convert the "تاريخ الدخول" column to the original date format
             df["تاريخ الدخول"] = pd.to_datetime(df["تاريخ الدخول"], format="%d.%m.%Y")
 
             # Calculate the date 10 days ago from today
@@ -19,6 +19,9 @@ def filter_csv():
 
             # Filter the DataFrame to keep only records from the last 10 days
             filtered_df = df[df["تاريخ الدخول"] >= ten_days_ago]
+
+            # Convert the "تاريخ الدخول" column back to the original format
+            filtered_df["تاريخ الدخول"] = filtered_df["تاريخ الدخول"].dt.strftime("%d.%m.%Y")
 
             # Create the "output" directory if it doesn't exist
             output_directory = "output"
